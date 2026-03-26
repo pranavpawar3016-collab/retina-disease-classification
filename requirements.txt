@@ -4,3 +4,5 @@ keras
 numpy
 pillow
 opencv-python
+gunicorn
+gdown
