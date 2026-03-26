@@ -29,7 +29,7 @@ if not os.path.exists(model_path):
     gdown.download(url, model_path, quiet=False)
 
 # Load model
-model = load_model(model_path, compile=False)
+model = load_model(model_path, compile=False, safe_mode=False)
 
 # =========================
 # CLASS NAMES
