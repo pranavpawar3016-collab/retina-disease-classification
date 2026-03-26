@@ -17,13 +17,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # =========================
-# MODEL DOWNLOAD (Google Drive)
+# GLOBAL MODEL (lazy loading)
 # =========================
-FILE_ID = "1HiqFT-7VpOXwO0Tu37sVgFdm0-fYbg17"
-url = f"https://drive.google.com/uc?id={FILE_ID}"
-model_path = "cnn.keras"
-
-# Download model if not present
 model = None
 
 # =========================
@@ -61,8 +56,15 @@ def predict():
 # =========================
 @app.route("/output", methods=["POST"])
 def output():
+    global model
+
+    if "image" not in request.files:
+        return "No file uploaded"
 
     file = request.files["image"]
+
+    if file.filename == "":
+        return "No selected file"
 
     filename = secure_filename(file.filename)
     filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
@@ -73,22 +75,22 @@ def output():
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)
 
-    global model
-    
+    # =========================
+    # LOAD MODEL (ONLY WHEN NEEDED)
+    # =========================
     if model is None:
-        FILE_ID = "1HiqFT-7VpOXwO0Tu37sVgFdm0-fYbg17"
+        FILE_ID = "1DTN1nFZMa-DubF19yt0hfWiFuYVF30uk"
         url = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
-        model_path = "cnn.keras"
-    
+        model_path = "cnn.h5"
+
         if not os.path.exists(model_path):
             print("Downloading model...")
             gdown.download(url, model_path, quiet=False)
-    
+
         print("Loading model...")
         model = load_model(model_path, compile=False)
-    
+
     preds = model.predict(img, verbose=0)[0]
-    print("Predictions:", preds)
 
     idx = np.argmax(preds)
     prediction = CLASS_NAMES[idx]
