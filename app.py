@@ -24,12 +24,7 @@ url = f"https://drive.google.com/uc?id={FILE_ID}"
 model_path = "cnn.keras"
 
 # Download model if not present
-if not os.path.exists(model_path):
-    print("Downloading model...")
-    gdown.download(url, model_path, quiet=False)
-
-# Load model
-model = load_model(model_path, compile=False, safe_mode=False)
+model = None
 
 # =========================
 # CLASS NAMES
@@ -78,6 +73,20 @@ def output():
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)
 
+    global model
+    
+    if model is None:
+        FILE_ID = "1HiqFT-7VpOXwO0Tu37sVgFdm0-fYbg17"
+        url = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
+        model_path = "cnn.keras"
+    
+        if not os.path.exists(model_path):
+            print("Downloading model...")
+            gdown.download(url, model_path, quiet=False)
+    
+        print("Loading model...")
+        model = load_model(model_path, compile=False)
+    
     preds = model.predict(img, verbose=0)[0]
     print("Predictions:", preds)
 
