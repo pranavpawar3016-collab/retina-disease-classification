@@ -6,6 +6,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
 from werkzeug.utils import secure_filename
 from tensorflow.keras.applications.efficientnet import preprocess_input
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')
 
 app = Flask(__name__)
 
@@ -75,6 +77,7 @@ def output():
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)
 
+
     # =========================
     # LOAD MODEL (ONLY WHEN NEEDED)
     # =========================
@@ -90,7 +93,7 @@ def output():
         print("Loading model...")
         model = load_model(model_path, compile=False)
 
-    preds = model.predict(img, verbose=0)[0]
+    preds = model.predict(img, batch_size=1, verbose=0)[0]
 
     idx = np.argmax(preds)
     prediction = CLASS_NAMES[idx]
