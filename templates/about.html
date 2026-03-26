@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>About Retina Detection</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+<h1>RETINA DISEASE RECOGNITION</h1>
+<nav>
+<a href="{{ url_for('home') }}">Home</a>
+<a href="{{ url_for('about') }}">About</a>
+<a href="{{ url_for('contact') }}">Contact</a>
+<a href="{{ url_for('predict') }}">Get Started</a>
+</nav>
+</header>
+
+<section class="about">
+<h2>About Project</h2>
+
+<p>This project detects retinal diseases using CNN deep learning models trained on ODIR dataset.</p>
+
+<h3>Pipeline</h3>
+<ul>
+<li>Data preprocessing</li>
+<li>CNN model training</li>
+<li>Model evaluation</li>
+<li>Web deployment using Flask</li>
+</ul>
+
+</section>
+
+</body>
+</html>

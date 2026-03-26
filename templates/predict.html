@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predict Retina Disease</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>Upload Fundus Image</h1>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+    </nav>
+</header>
+
+<section class="predict">
+
+<form action="/output" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <br><br>
+    <button type="submit">Predict</button>
+</form>
+
+</section>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Retina Disease Recognition</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+<h1>RETINA DISEASE RECOGNITION</h1>
+<nav>
+<a href="{{ url_for('home') }}">Home</a>
+<a href="{{ url_for('about') }}">About</a>
+<a href="{{ url_for('contact') }}">Contact</a>
+<a href="{{ url_for('predict') }}">Get Started</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>AI Based Retina Disease Detection</h2>
+<p>Upload fundus image and detect eye diseases using deep learning.</p>
+
+<a href="{{ url_for('predict') }}" class="btn">
+Start Prediction
+</a>
+Start Prediction
+</section>
+
+</body>
+</html>
