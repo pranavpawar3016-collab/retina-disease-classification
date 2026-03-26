@@ -13,6 +13,13 @@
 
 <h3>Disease: {{ prediction }}</h3>
 <h4>Confidence: {{ confidence }}%</h4>
+<p>Confidence: {{ confidence }}%</p>
+
+<div style="width: 300px; background: #ddd;">
+  <div style="width: {{ confidence }}%; background: green; color:white;">
+    {{ confidence }}%
+  </div>
+</div>
 
 <a href="{{ url_for('predict') }}">
 <button>Try Another</button>
