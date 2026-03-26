@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import gdown
 from flask import Flask, render_template, request
 from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
@@ -8,14 +9,31 @@ from tensorflow.keras.applications.efficientnet import preprocess_input
 
 app = Flask(__name__)
 
+# =========================
+# FOLDER SETUP
+# =========================
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# LOAD MODEL
-model = load_model("cnn.keras", compile=False)
+# =========================
+# MODEL DOWNLOAD (Google Drive)
+# =========================
+FILE_ID = "1HiqFT-7VpOXwO0Tu37sVgFdm0-fYbg17"
+url = f"https://drive.google.com/uc?id={FILE_ID}"
+model_path = "cnn.keras"
 
+# Download model if not present
+if not os.path.exists(model_path):
+    print("Downloading model...")
+    gdown.download(url, model_path, quiet=False)
+
+# Load model
+model = load_model(model_path, compile=False)
+
+# =========================
+# CLASS NAMES
+# =========================
 CLASS_NAMES = [
     'Cataract',
     'Diabetes',
@@ -24,7 +42,9 @@ CLASS_NAMES = [
     'Other'
 ]
 
+# =========================
 # ROUTES
+# =========================
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -41,7 +61,9 @@ def contact():
 def predict():
     return render_template("predict.html")
 
+# =========================
 # PREDICTION
+# =========================
 @app.route("/output", methods=["POST"])
 def output():
 
@@ -51,7 +73,7 @@ def output():
     filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     file.save(filepath)
 
-    img = load_img(filepath, target_size=(224,224))
+    img = load_img(filepath, target_size=(224, 224))
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)
@@ -66,11 +88,13 @@ def output():
     return render_template(
         "result.html",
         prediction=prediction,
-        confidence=round(confidence,2),
+        confidence=round(confidence, 2),
         image_path=filepath
     )
 
-
+# =========================
+# RUN APP
+# =========================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
